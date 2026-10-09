@@ -4,6 +4,7 @@ on:
     paths:
       - 'CruiseMurderForge-0.11.0-source.zip'
       - '.github/workflows/build-from-zip.yml'
+      - '.github/scripts/patch-sources.py'
   workflow_dispatch:
 jobs:
   build:
@@ -28,6 +29,8 @@ jobs:
           mkdir -p extracted
           unzip -q CruiseMurderForge-0.11.0-source.zip -d extracted
           test -f extracted/CruiseMurderForge/build.gradle
+      - name: Apply 1.20.1 Forge source fixes
+        run: python3 .github/scripts/patch-sources.py extracted/CruiseMurderForge
       - name: Build mod
         working-directory: extracted/CruiseMurderForge
         run: gradle --no-daemon build --stacktrace
